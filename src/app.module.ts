@@ -8,6 +8,7 @@ import { HealthController } from './health/health.controller'
 import { HealthService } from './health/health.service'
 import { UsersModule } from './modules/users/users.module'
 import { AuthModule } from './modules/auth/auth.module'
+import { CacheModule } from './modules/cache/cache.module'
 import { databaseConfig } from './config/database.config'
 import { redisConfig } from './config/redis.config'
 import { rabbitmqConfig } from './config/rabbitmq.config'
@@ -47,6 +48,7 @@ import { rabbitmqConfig } from './config/rabbitmq.config'
     TerminusModule,
 
     // 功能模块
+    CacheModule, // 缓存模块
     UsersModule, // 用户模块
     AuthModule, // 验证模块
   ],
