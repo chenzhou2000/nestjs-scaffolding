@@ -68,7 +68,7 @@ export class CacheService {
   }
 
   /**
-   * Check if key exists in cache
+   * 检查键是否存在于缓存中
    */
   async exists(key: string, prefix?: string): Promise<boolean> {
     try {
@@ -82,7 +82,7 @@ export class CacheService {
   }
 
   /**
-   * Clear all cache (flush database)
+   * 清除所有缓存（刷新数据库）
    */
   async flush(): Promise<void> {
     try {
@@ -95,7 +95,7 @@ export class CacheService {
   }
 
   /**
-   * Get multiple keys at once
+   * 一次获取多个键
    */
   async mget<T>(keys: string[], prefix?: string): Promise<(T | null)[]> {
     try {
@@ -117,7 +117,7 @@ export class CacheService {
   }
 
   /**
-   * Set multiple key-value pairs
+   * 设置多个键值对
    */
   async mset(
     keyValuePairs: Array<{ key: string; value: any }>,
@@ -142,7 +142,7 @@ export class CacheService {
   }
 
   /**
-   * Increment a numeric value in cache
+   * 增加缓存中的数值
    */
   async incr(key: string, prefix?: string): Promise<number> {
     try {
@@ -155,7 +155,7 @@ export class CacheService {
   }
 
   /**
-   * Decrement a numeric value in cache
+   * 减少缓存中的数值
    */
   async decr(key: string, prefix?: string): Promise<number> {
     try {
