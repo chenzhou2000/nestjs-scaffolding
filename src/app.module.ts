@@ -15,8 +15,8 @@ import { rabbitmqConfig } from './config/rabbitmq.config'
     // Configuration module
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env.local', '.env'],
-      load: [databaseConfig, redisConfig, rabbitmqConfig],
+      envFilePath: ['.env.local', '.env'], // Load .env.local first, then .env
+      load: [databaseConfig, redisConfig, rabbitmqConfig], // Load configuration files
     }),
 
     // Database module - only if database is available

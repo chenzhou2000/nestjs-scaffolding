@@ -59,8 +59,8 @@ export class HealthController {
   }
 
   @Get('live')
-  @ApiOperation({ summary: 'Check if application is alive' })
-  @ApiResponse({ status: 200, description: 'Application is alive' })
+  @ApiOperation({ summary: '检查应用程序是否运行正常' })
+  @ApiResponse({ status: 200, description: '应用程序已启动' })
   alive() {
     return {
       status: 'ok',

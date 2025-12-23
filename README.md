@@ -1,6 +1,5 @@
-# NestJS Learning API
+# NestJS 基础框架
 
-A comprehensive NestJS learning project that covers modern backend development technologies including MySQL, Redis, RabbitMQ, gRPC, and more.
 
 ## 🚀 Features
 

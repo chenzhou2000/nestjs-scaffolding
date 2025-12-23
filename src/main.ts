@@ -9,7 +9,10 @@ import * as compression from 'compression'
 import helmet from 'helmet'
 
 async function bootstrap() {
+  // Create the NestJS application
   const app = await NestFactory.create(AppModule)
+
+  // Get ConfigService instance
   const configService = app.get(ConfigService)
 
   // Security middleware
@@ -29,11 +32,11 @@ async function bootstrap() {
   app.useGlobalFilters(new GlobalExceptionFilter())
   app.useGlobalInterceptors(new LoggingInterceptor())
 
-  // API prefix
+  // api 前缀
   const apiPrefix = configService.get('API_PREFIX', 'api/v1')
   app.setGlobalPrefix(apiPrefix)
 
-  // CORS configuration
+  // CORS 配置
   app.enableCors({
     origin: true,
     credentials: true,
