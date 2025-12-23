@@ -9,6 +9,7 @@ import { HealthService } from './health/health.service'
 import { UsersModule } from './modules/users/users.module'
 import { AuthModule } from './modules/auth/auth.module'
 import { CacheModule } from './modules/cache/cache.module'
+import { GrpcModule } from './modules/grpc/grpc.module'
 import { databaseConfig } from './config/database.config'
 import { redisConfig } from './config/redis.config'
 import { rabbitmqConfig } from './config/rabbitmq.config'
@@ -51,6 +52,7 @@ import { rabbitmqConfig } from './config/rabbitmq.config'
     CacheModule, // 缓存模块
     UsersModule, // 用户模块
     AuthModule, // 验证模块
+    GrpcModule, // gRPC模块
   ],
   controllers: [AppController, HealthController],
   providers: [AppService, HealthService],

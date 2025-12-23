@@ -12,8 +12,8 @@ export interface SessionData {
 }
 
 export interface SessionOptions {
-  ttl?: number // Session TTL in seconds
-  slidingExpiration?: boolean // Whether to extend session on activity
+  ttl?: number // 会话TTL（秒）
+  slidingExpiration?: boolean // 是否在活动时延长会话
 }
 
 @Injectable()
@@ -21,13 +21,13 @@ export class SessionService {
   private readonly logger = new Logger(SessionService.name)
   private readonly sessionPrefix = 'session'
   private readonly blacklistPrefix = 'blacklist'
-  private readonly defaultSessionTTL = 24 * 60 * 60 // 24 hours
-  private readonly defaultSlidingWindow = 30 * 60 // 30 minutes
+  private readonly defaultSessionTTL = 24 * 60 * 60 // 24小时
+  private readonly defaultSlidingWindow = 30 * 60 // 30分钟
 
   constructor(private readonly cacheService: CacheService) {}
 
   /**
-   * Create a new session
+   * 创建新会话
    */
   async createSession(
     sessionId: string,
@@ -58,7 +58,7 @@ export class SessionService {
   }
 
   /**
-   * Get session data
+   * 获取会话数据
    */
   async getSession(sessionId: string): Promise<SessionData | null> {
     try {
@@ -71,7 +71,7 @@ export class SessionService {
         return null
       }
 
-      // Convert ISO strings back to Date objects
+      // 将ISO字符串转换回Date对象
       return {
         ...sessionData,
         loginTime: new Date(sessionData.loginTime),
@@ -84,7 +84,7 @@ export class SessionService {
   }
 
   /**
-   * Update session activity
+   * 更新会话活动
    */
   async updateActivity(
     sessionId: string,
@@ -96,10 +96,10 @@ export class SessionService {
         throw new Error('Session not found')
       }
 
-      // Update last activity
+      // 更新最后活动时间
       session.lastActivity = new Date()
 
-      // Extend session if sliding expiration is enabled
+      // 如果启用滑动过期，则延长会话
       const ttl = options.slidingExpiration 
         ? (options.ttl || this.defaultSlidingWindow)
         : undefined
@@ -125,7 +125,7 @@ export class SessionService {
   }
 
   /**
-   * Destroy a session
+   * 销毁会话
    */
   async destroySession(sessionId: string): Promise<void> {
     try {
@@ -138,7 +138,7 @@ export class SessionService {
   }
 
   /**
-   * Check if session exists and is valid
+   * 检查会话是否存在且有效
    */
   async isValidSession(sessionId: string): Promise<boolean> {
     try {
@@ -151,7 +151,7 @@ export class SessionService {
   }
 
   /**
-   * Get all active sessions for a user
+   * 获取用户的所有活动会话
    */
   async getUserSessions(userId: string): Promise<string[]> {
     try {

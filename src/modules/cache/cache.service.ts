@@ -168,7 +168,7 @@ export class CacheService {
   }
 
   /**
-   * Set expiration time for a key
+   * 为键设置过期时间
    */
   async expire(key: string, ttl: number, prefix?: string): Promise<void> {
     try {
@@ -181,7 +181,7 @@ export class CacheService {
   }
 
   /**
-   * Get keys matching a pattern
+   * 获取匹配模式的键
    */
   async keys(pattern: string, prefix?: string): Promise<string[]> {
     try {
@@ -194,7 +194,7 @@ export class CacheService {
   }
 
   /**
-   * Build full cache key with optional prefix
+   * 使用可选前缀构建完整缓存键
    */
   private buildKey(key: string, prefix?: string): string {
     const basePrefix = 'nestjs-api'
@@ -205,7 +205,7 @@ export class CacheService {
   }
 
   /**
-   * Get Redis client for advanced operations
+   * 获取Redis客户端进行高级操作
    */
   getClient(): Redis {
     return this.redisClient
