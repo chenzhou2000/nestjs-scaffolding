@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common'
+import { Controller, Get, Param } from '@nestjs/common'
 import {
   HealthCheckService,
   HealthCheck,
@@ -7,6 +7,8 @@ import {
   DiskHealthIndicator,
 } from '@nestjs/terminus'
 import { HealthService } from './health.service'
+import { CircuitBreakerService } from '../common/circuit-breaker/circuit-breaker.service'
+import { HealthCheckService as CustomHealthCheckService } from '../common/health/health-check.service'
 
 @Controller('health')
 export class HealthController {
@@ -16,6 +18,8 @@ export class HealthController {
     private memory: MemoryHealthIndicator,
     private disk: DiskHealthIndicator,
     private healthService: HealthService,
+    private readonly circuitBreakerService: CircuitBreakerService,
+    private readonly customHealthCheckService: CustomHealthCheckService,
   ) {}
 
   @Get()
@@ -57,6 +61,31 @@ export class HealthController {
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
       version: process.env.npm_package_version || '1.0.0',
+    }
+  }
+
+  @Get('detailed')
+  async detailedCheck() {
+    return this.customHealthCheckService.getHealthStatus()
+  }
+
+  @Get('circuit-breakers')
+  getCircuitBreakerStatus() {
+    return {
+      timestamp: new Date().toISOString(),
+      circuitBreakers: this.circuitBreakerService.getAllStatus(),
+    }
+  }
+
+  @Get('circuit-breakers/:serviceName/reset')
+  resetCircuitBreaker(@Param('serviceName') serviceName: string) {
+    const success = this.circuitBreakerService.resetCircuitBreaker(serviceName)
+    return {
+      success,
+      message: success 
+        ? `Circuit breaker for ${serviceName} has been reset`
+        : `Circuit breaker for ${serviceName} not found`,
+      timestamp: new Date().toISOString(),
     }
   }
 }

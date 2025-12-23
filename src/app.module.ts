@@ -11,6 +11,8 @@ import { AuthModule } from './modules/auth/auth.module'
 import { CacheModule } from './modules/cache/cache.module'
 import { GrpcModule } from './modules/grpc/grpc.module'
 import { LoggingModule } from './modules/logging/logging.module'
+import { ErrorHandlingModule } from './common/error-handling/error-handling.module'
+import { DemoModule } from './common/demo/demo.module'
 import { databaseConfig } from './config/database.config'
 import { redisConfig } from './config/redis.config'
 import { rabbitmqConfig } from './config/rabbitmq.config'
@@ -50,12 +52,18 @@ import { loggerConfig } from './config/logger.config'
     // 健康检查模块
     TerminusModule,
 
+    // 核心模块
+    ErrorHandlingModule, // 错误处理和熔断器模块
+
     // 功能模块
     LoggingModule, // 日志模块
     CacheModule, // 缓存模块
     UsersModule, // 用户模块
     AuthModule, // 验证模块
     GrpcModule, // gRPC模块
+    
+    // 演示模块 (仅在开发环境)
+    ...(process.env.NODE_ENV === 'development' ? [DemoModule] : []),
   ],
   controllers: [AppController, HealthController],
   providers: [AppService, HealthService],

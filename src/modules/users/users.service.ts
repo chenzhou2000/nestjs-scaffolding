@@ -1,12 +1,20 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository, Like } from 'typeorm'
+import { Repository } from 'typeorm'
 import { User } from '../../entities/user.entity'
 import { CreateUserDto } from '../../dto/create-user.dto'
 import { UpdateUserDto } from '../../dto/update-user.dto'
 import { QueryUserDto, PaginatedResult } from '../../dto/query-user.dto'
 import { CacheService } from '../cache/cache.service'
 import { Performance } from '../../common/decorators/performance.decorator'
+import { DatabaseCircuitBreaker, RedisCircuitBreaker } from '../../common/decorators/circuit-breaker.decorator'
+import {
+  ResourceNotFoundException,
+  ResourceConflictException,
+  DatabaseException,
+  RedisException,
+} from '../../common/exceptions'
+import { RetryUtil } from '../../common/retry/retry.util'
 import * as bcrypt from 'bcryptjs'
 
 @Injectable()
@@ -22,34 +30,54 @@ export class UsersService {
   ) {}
 
   @Performance('User Creation')
+  @DatabaseCircuitBreaker()
   async create(createUserDto: CreateUserDto): Promise<User> {
-    // 检查邮箱是否已存在
-    const existingUser = await this.userRepository.findOne({
-      where: { email: createUserDto.email },
-    })
+    try {
+      // 检查邮箱是否已存在
+      const existingUser = await RetryUtil.executeWithRetry(
+        () => this.userRepository.findOne({
+          where: { email: createUserDto.email },
+        }),
+        { maxAttempts: 2, baseDelay: 500 }
+      )
 
-    if (existingUser) {
-      throw new ConflictException('User with this email already exists')
+      if (existingUser) {
+        throw new ResourceConflictException('User', 'email', createUserDto.email)
+      }
+
+      // 哈希密码
+      const hashedPassword = await bcrypt.hash(createUserDto.password, 10)
+
+      // 创建用户
+      const user = this.userRepository.create({
+        ...createUserDto,
+        password: hashedPassword,
+      })
+
+      const savedUser = await RetryUtil.executeWithRetry(
+        () => this.userRepository.save(user),
+        { maxAttempts: 3, baseDelay: 1000 }
+      )
+
+      // Cache the new user with error handling
+      try {
+        await this.cacheUser(savedUser)
+        await this.clearUserListCache()
+      } catch (error) {
+        // Log cache error but don't fail the operation
+        console.warn('Cache operation failed during user creation:', error.message)
+      }
+
+      return savedUser
+    } catch (error) {
+      if (error.code?.includes('ER_DUP_ENTRY')) {
+        throw new ResourceConflictException('User', 'email', createUserDto.email)
+      }
+      if (error.name === 'QueryFailedError') {
+        throw new DatabaseException('create user', error)
+      }
+      throw error
     }
-
-    // 哈希密码
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10)
-
-    // 创建用户
-    const user = this.userRepository.create({
-      ...createUserDto,
-      password: hashedPassword,
-    })
-
-    const savedUser = await this.userRepository.save(user)
-
-    // Cache the new user
-    await this.cacheUser(savedUser)
-
-    // Clear user list cache since we added a new user
-    await this.clearUserListCache()
-
-    return savedUser
   }
 
   @Performance('User List Query')
@@ -116,30 +144,53 @@ export class UsersService {
   }
 
   @Performance('User Lookup by ID')
+  @DatabaseCircuitBreaker()
   async findById(id: string): Promise<User> {
-    // Try to get from cache first
-    const cachedUser = await this.cacheService.get<User>(
-      id,
-      this.userCachePrefix
-    )
-    
-    if (cachedUser) {
-      return cachedUser
+    try {
+      // Try to get from cache first with error handling
+      let cachedUser: User | null = null
+      try {
+        cachedUser = await this.cacheService.get<User>(
+          id,
+          this.userCachePrefix
+        )
+      } catch (error) {
+        console.warn('Cache read failed for user lookup:', error.message)
+      }
+      
+      if (cachedUser) {
+        return cachedUser
+      }
+
+      const user = await RetryUtil.executeWithRetry(
+        () => this.userRepository.findOne({
+          where: { id },
+          relations: ['files'],
+        }),
+        { maxAttempts: 2, baseDelay: 500 }
+      )
+
+      if (!user) {
+        throw new ResourceNotFoundException('User', id)
+      }
+
+      // Cache the user with error handling
+      try {
+        await this.cacheUser(user)
+      } catch (error) {
+        console.warn('Cache write failed for user:', error.message)
+      }
+
+      return user
+    } catch (error) {
+      if (error instanceof ResourceNotFoundException) {
+        throw error
+      }
+      if (error.name === 'QueryFailedError') {
+        throw new DatabaseException('find user by id', error)
+      }
+      throw error
     }
-
-    const user = await this.userRepository.findOne({
-      where: { id },
-      relations: ['files'],
-    })
-
-    if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`)
-    }
-
-    // Cache the user
-    await this.cacheUser(user)
-
-    return user
   }
 
   @Performance('User Lookup by Email')
@@ -181,7 +232,7 @@ export class UsersService {
       })
 
       if (existingUser) {
-        throw new ConflictException('User with this email already exists')
+        throw new ResourceConflictException('User', 'email', updateUserDto.email)
       }
     }
 
@@ -220,40 +271,55 @@ export class UsersService {
   }
 
   /**
-   * Cache helper methods
+   * Cache helper methods with error handling
    */
+  @RedisCircuitBreaker()
   private async cacheUser(user: User): Promise<void> {
-    // Cache by ID
-    await this.cacheService.set(user.id, user, {
-      ttl: this.defaultCacheTTL,
-      prefix: this.userCachePrefix,
-    })
+    try {
+      // Cache by ID
+      await this.cacheService.set(user.id, user, {
+        ttl: this.defaultCacheTTL,
+        prefix: this.userCachePrefix,
+      })
 
-    // Cache by email
-    await this.cacheService.set(`email:${user.email}`, user, {
-      ttl: this.defaultCacheTTL,
-      prefix: this.userCachePrefix,
-    })
+      // Cache by email
+      await this.cacheService.set(`email:${user.email}`, user, {
+        ttl: this.defaultCacheTTL,
+        prefix: this.userCachePrefix,
+      })
+    } catch (error) {
+      throw new RedisException('cache user', error)
+    }
   }
 
+  @RedisCircuitBreaker()
   private async clearUserCache(user: User): Promise<void> {
-    // Clear cache by ID
-    await this.cacheService.del(user.id, this.userCachePrefix)
+    try {
+      // Clear cache by ID
+      await this.cacheService.del(user.id, this.userCachePrefix)
 
-    // Clear cache by email
-    await this.cacheService.del(`email:${user.email}`, this.userCachePrefix)
+      // Clear cache by email
+      await this.cacheService.del(`email:${user.email}`, this.userCachePrefix)
+    } catch (error) {
+      throw new RedisException('clear user cache', error)
+    }
   }
 
+  @RedisCircuitBreaker()
   private async clearUserListCache(): Promise<void> {
-    // Clear all user list cache entries
-    const pattern = '*'
-    const keys = await this.cacheService.keys(pattern, this.userListCachePrefix)
-    
-    for (const key of keys) {
-      const cacheKey = key.split(':').pop()
-      if (cacheKey) {
-        await this.cacheService.del(cacheKey, this.userListCachePrefix)
+    try {
+      // Clear all user list cache entries
+      const pattern = '*'
+      const keys = await this.cacheService.keys(pattern, this.userListCachePrefix)
+      
+      for (const key of keys) {
+        const cacheKey = key.split(':').pop()
+        if (cacheKey) {
+          await this.cacheService.del(cacheKey, this.userListCachePrefix)
+        }
       }
+    } catch (error) {
+      throw new RedisException('clear user list cache', error)
     }
   }
 

@@ -6,7 +6,9 @@ import { AppModule } from './app.module'
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter'
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor'
 import { PerformanceInterceptor } from './common/interceptors/performance.interceptor'
+import { CircuitBreakerInterceptor } from './common/interceptors/circuit-breaker.interceptor'
 import { LoggingService } from './modules/logging/logging.service'
+import { CircuitBreakerService } from './common/circuit-breaker/circuit-breaker.service'
 import * as compression from 'compression'
 import helmet from 'helmet'
 import * as fs from 'fs'
@@ -28,6 +30,7 @@ async function bootstrap() {
   // 获取ConfigService实例
   const configService = app.get(ConfigService)
   const loggingService = app.get(LoggingService)
+  const circuitBreakerService = app.get(CircuitBreakerService)
 
   // 安全中间件
   app.use(helmet())
@@ -43,10 +46,11 @@ async function bootstrap() {
   )
 
   // 全局过滤器和拦截器
-  app.useGlobalFilters(new GlobalExceptionFilter(loggingService))
+  app.useGlobalFilters(new GlobalExceptionFilter(loggingService, circuitBreakerService))
   app.useGlobalInterceptors(
     new LoggingInterceptor(loggingService),
     new PerformanceInterceptor(app.get('Reflector'), loggingService),
+    new CircuitBreakerInterceptor(app.get('Reflector'), circuitBreakerService),
   )
 
   // api 前缀
