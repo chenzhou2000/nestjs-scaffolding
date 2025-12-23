@@ -12,6 +12,7 @@ import { SessionService } from './session.service'
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
 import { RolesGuard } from '../auth/guards/roles.guard'
 import { Roles } from '../auth/decorators/roles.decorator'
+import { UserRole } from '../../entities/user.entity'
 
 @Controller('cache')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -22,7 +23,7 @@ export class CacheController {
   ) {}
 
   @Get('stats')
-  @Roles('admin')
+  @Roles(UserRole.ADMIN)
   async getCacheStats() {
     const sessionStats = await this.sessionService.getSessionStats()
     
@@ -36,7 +37,7 @@ export class CacheController {
   }
 
   @Delete('flush')
-  @Roles('admin')
+  @Roles(UserRole.ADMIN)
   @HttpCode(HttpStatus.NO_CONTENT)
   async flushCache() {
     await this.cacheService.flush()
@@ -46,7 +47,7 @@ export class CacheController {
   }
 
   @Delete('key/:key')
-  @Roles('admin')
+  @Roles(UserRole.ADMIN)
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteKey(@Param('key') key: string) {
     await this.cacheService.del(key)
@@ -56,7 +57,7 @@ export class CacheController {
   }
 
   @Get('key/:key/exists')
-  @Roles('admin')
+  @Roles(UserRole.ADMIN)
   async checkKeyExists(@Param('key') key: string) {
     const exists = await this.cacheService.exists(key)
     return {
@@ -69,7 +70,7 @@ export class CacheController {
   }
 
   @Delete('sessions/cleanup')
-  @Roles('admin')
+  @Roles(UserRole.ADMIN)
   async cleanupSessions() {
     const cleanedCount = await this.sessionService.cleanupExpiredSessions()
     return {

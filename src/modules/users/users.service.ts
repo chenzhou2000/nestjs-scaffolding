@@ -6,6 +6,7 @@ import { CreateUserDto } from '../../dto/create-user.dto'
 import { UpdateUserDto } from '../../dto/update-user.dto'
 import { QueryUserDto, PaginatedResult } from '../../dto/query-user.dto'
 import { CacheService } from '../cache/cache.service'
+import { Performance } from '../../common/decorators/performance.decorator'
 import * as bcrypt from 'bcryptjs'
 
 @Injectable()
@@ -20,6 +21,7 @@ export class UsersService {
     private readonly cacheService: CacheService,
   ) {}
 
+  @Performance('User Creation')
   async create(createUserDto: CreateUserDto): Promise<User> {
     // 检查邮箱是否已存在
     const existingUser = await this.userRepository.findOne({
@@ -50,6 +52,7 @@ export class UsersService {
     return savedUser
   }
 
+  @Performance('User List Query')
   async findAll(queryDto: QueryUserDto): Promise<PaginatedResult<User>> {
     const { page = 1, limit = 10, search, role, isActive } = queryDto
     
@@ -112,6 +115,7 @@ export class UsersService {
     return result
   }
 
+  @Performance('User Lookup by ID')
   async findById(id: string): Promise<User> {
     // Try to get from cache first
     const cachedUser = await this.cacheService.get<User>(
@@ -138,6 +142,7 @@ export class UsersService {
     return user
   }
 
+  @Performance('User Lookup by Email')
   async findByEmail(email: string): Promise<User | null> {
     // Try to get from cache first
     const cacheKey = `email:${email}`
@@ -165,6 +170,7 @@ export class UsersService {
     return user
   }
 
+  @Performance('User Update')
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.findById(id)
 
@@ -197,6 +203,7 @@ export class UsersService {
     return updatedUser
   }
 
+  @Performance('User Deletion')
   async delete(id: string): Promise<void> {
     const user = await this.findById(id)
     await this.userRepository.remove(user)

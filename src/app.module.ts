@@ -10,9 +10,11 @@ import { UsersModule } from './modules/users/users.module'
 import { AuthModule } from './modules/auth/auth.module'
 import { CacheModule } from './modules/cache/cache.module'
 import { GrpcModule } from './modules/grpc/grpc.module'
+import { LoggingModule } from './modules/logging/logging.module'
 import { databaseConfig } from './config/database.config'
 import { redisConfig } from './config/redis.config'
 import { rabbitmqConfig } from './config/rabbitmq.config'
+import { loggerConfig } from './config/logger.config'
 
 @Module({
   imports: [
@@ -20,7 +22,7 @@ import { rabbitmqConfig } from './config/rabbitmq.config'
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env.local', '.env'], // 先加载.env.local，然后加载.env
-      load: [databaseConfig, redisConfig, rabbitmqConfig], // 加载配置文件
+      load: [databaseConfig, redisConfig, rabbitmqConfig, loggerConfig], // 加载配置文件
     }),
 
     // 数据库模块 - 仅当数据库可用时
@@ -49,6 +51,7 @@ import { rabbitmqConfig } from './config/rabbitmq.config'
     TerminusModule,
 
     // 功能模块
+    LoggingModule, // 日志模块
     CacheModule, // 缓存模块
     UsersModule, // 用户模块
     AuthModule, // 验证模块

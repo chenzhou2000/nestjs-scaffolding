@@ -4,11 +4,17 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
+  Inject,
 } from '@nestjs/common'
 import { Request, Response } from 'express'
+import { LoggingService } from '../../modules/logging/logging.service'
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
+  constructor(
+    @Inject(LoggingService) private readonly loggingService: LoggingService,
+  ) {}
+
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp()
     const response = ctx.getResponse<Response>()
@@ -44,11 +50,14 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       }),
     }
 
-    // 记录错误
-    console.error('Global Exception:', {
-      ...errorResponse,
-      stack: (exception as Error).stack,
-    })
+    // Log error with detailed context using LoggingService
+    const userId = (request as any).user?.id
+    this.loggingService.logError(
+      exception as Error,
+      'GlobalExceptionFilter',
+      request,
+      userId,
+    )
 
     response.status(status).json(errorResponse)
   }

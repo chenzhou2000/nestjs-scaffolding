@@ -18,7 +18,7 @@ import { UsersModule } from '../users/users.module';
         transport: Transport.GRPC,
         options: {
           package: 'user',
-          protoPath: join(__dirname, '../../proto/user.proto'),
+          protoPath: join(process.cwd(), 'src/proto/user.proto'),
           url: process.env.GRPC_USER_SERVICE_URL || 'localhost:50051',
         },
       },
@@ -27,7 +27,7 @@ import { UsersModule } from '../users/users.module';
         transport: Transport.GRPC,
         options: {
           package: 'notification',
-          protoPath: join(__dirname, '../../proto/notification.proto'),
+          protoPath: join(process.cwd(), 'src/proto/notification.proto'),
           url: process.env.GRPC_NOTIFICATION_SERVICE_URL || 'localhost:50052',
         },
       },
