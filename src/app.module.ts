@@ -7,6 +7,7 @@ import { AppService } from './app.service'
 import { HealthController } from './health/health.controller'
 import { HealthService } from './health/health.service'
 import { UsersModule } from './modules/users/users.module'
+import { AuthModule } from './modules/auth/auth.module'
 import { databaseConfig } from './config/database.config'
 import { redisConfig } from './config/redis.config'
 import { rabbitmqConfig } from './config/rabbitmq.config'
@@ -46,7 +47,8 @@ import { rabbitmqConfig } from './config/rabbitmq.config'
     TerminusModule,
 
     // 功能模块
-    UsersModule,
+    UsersModule, // 用户模块
+    AuthModule, // 验证模块
   ],
   controllers: [AppController, HealthController],
   providers: [AppService, HealthService],

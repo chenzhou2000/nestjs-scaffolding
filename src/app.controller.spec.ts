@@ -17,7 +17,7 @@ describe('AppController', () => {
   describe('root', () => {
     it('should return welcome message', () => {
       expect(appController.getHello()).toBe(
-        'Welcome to NestJS Learning API! 🚀',
+        'Welcome! 🚀',
       )
     })
   })
