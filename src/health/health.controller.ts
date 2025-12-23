@@ -1,5 +1,4 @@
 import { Controller, Get } from '@nestjs/common'
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger'
 import {
   HealthCheckService,
   HealthCheck,
@@ -9,7 +8,6 @@ import {
 } from '@nestjs/terminus'
 import { HealthService } from './health.service'
 
-@ApiTags('Health')
 @Controller('health')
 export class HealthController {
   constructor(
@@ -21,9 +19,6 @@ export class HealthController {
   ) {}
 
   @Get()
-  @ApiOperation({ summary: 'Check application health' })
-  @ApiResponse({ status: 200, description: 'Health check successful' })
-  @ApiResponse({ status: 503, description: 'Health check failed' })
   @HealthCheck()
   check() {
     const checks = [
@@ -43,9 +38,6 @@ export class HealthController {
   }
 
   @Get('ready')
-  @ApiOperation({ summary: 'Check if application is ready' })
-  @ApiResponse({ status: 200, description: 'Application is ready' })
-  @ApiResponse({ status: 503, description: 'Application is not ready' })
   @HealthCheck()
   readiness() {
     const checks = [() => this.healthService.checkRedis()]
@@ -59,8 +51,6 @@ export class HealthController {
   }
 
   @Get('live')
-  @ApiOperation({ summary: '检查应用程序是否运行正常' })
-  @ApiResponse({ status: 200, description: '应用程序已启动' })
   alive() {
     return {
       status: 'ok',
