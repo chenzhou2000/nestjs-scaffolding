@@ -49,7 +49,7 @@ export class CacheInterceptor implements NestInterceptor {
     const fullCacheKey = this.buildCacheKey(cacheKey, request)
 
     try {
-      // Try to get from cache first
+      // 首先尝试从缓存获取
       const cachedResult = await this.cacheService.get(fullCacheKey, cachePrefix)
       
       if (cachedResult !== null) {
@@ -59,7 +59,7 @@ export class CacheInterceptor implements NestInterceptor {
 
       this.logger.debug(`Cache miss: ${fullCacheKey}`)
 
-      // If not in cache, execute the method and cache the result
+      // 如果缓存中没有，执行方法并缓存结果
       return next.handle().pipe(
         tap(async (result) => {
           try {
@@ -80,24 +80,24 @@ export class CacheInterceptor implements NestInterceptor {
   }
 
   private buildCacheKey(baseKey: string, request: any): string {
-    // Build cache key based on request parameters
+    // 基于请求参数构建缓存键
     const params = request.params || {}
     const query = request.query || {}
     const user = request.user || {}
 
     const keyParts = [baseKey]
 
-    // Add user ID if available
+    // 如果可用，添加用户ID
     if (user.id) {
       keyParts.push(`user:${user.id}`)
     }
 
-    // Add route parameters
+    // 添加路由参数
     Object.keys(params).forEach(key => {
       keyParts.push(`${key}:${params[key]}`)
     })
 
-    // Add query parameters (sorted for consistency)
+    // 添加查询参数（排序以保持一致性）
     const sortedQueryKeys = Object.keys(query).sort()
     sortedQueryKeys.forEach(key => {
       keyParts.push(`${key}:${query[key]}`)

@@ -2,19 +2,19 @@ import { Injectable, Inject, Logger } from '@nestjs/common'
 import { Redis } from 'ioredis'
 
 export interface CacheOptions {
-  ttl?: number // Time to live in seconds
+  ttl?: number // 生存时间（秒）
   prefix?: string
 }
 
 @Injectable()
 export class CacheService {
   private readonly logger = new Logger(CacheService.name)
-  private readonly defaultTTL = 3600 // 1 hour default TTL
+  private readonly defaultTTL = 3600 // 默认TTL为1小时
 
   constructor(@Inject('REDIS_CLIENT') private readonly redisClient: Redis) {}
 
   /**
-   * Get value from cache
+   * 从缓存获取值
    */
   async get<T>(key: string, prefix?: string): Promise<T | null> {
     try {
@@ -33,7 +33,7 @@ export class CacheService {
   }
 
   /**
-   * Set value in cache
+   * 在缓存中设置值
    */
   async set(
     key: string,
@@ -54,7 +54,7 @@ export class CacheService {
   }
 
   /**
-   * Delete value from cache
+   * 从缓存删除值
    */
   async del(key: string, prefix?: string): Promise<void> {
     try {
