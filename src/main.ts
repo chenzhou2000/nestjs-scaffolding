@@ -8,17 +8,17 @@ import * as compression from 'compression'
 import helmet from 'helmet'
 
 async function bootstrap() {
-  // Create the NestJS application
+  // 创建NestJS应用程序
   const app = await NestFactory.create(AppModule)
 
-  // Get ConfigService instance
+  // 获取ConfigService实例
   const configService = app.get(ConfigService)
 
-  // Security middleware
+  // 安全中间件
   app.use(helmet())
   app.use(compression())
 
-  // Global pipes
+  // 全局管道
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -27,7 +27,7 @@ async function bootstrap() {
     }),
   )
 
-  // Global filters and interceptors
+  // 全局过滤器和拦截器
   app.useGlobalFilters(new GlobalExceptionFilter())
   app.useGlobalInterceptors(new LoggingInterceptor())
 
@@ -41,7 +41,7 @@ async function bootstrap() {
     credentials: true,
   })
 
-  // Start the application
+  // 启动应用程序
   const port = configService.get('PORT', 3000)
   await app.listen(port)
 

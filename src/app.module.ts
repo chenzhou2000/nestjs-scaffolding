@@ -13,14 +13,14 @@ import { rabbitmqConfig } from './config/rabbitmq.config'
 
 @Module({
   imports: [
-    // Configuration module
+    // 配置模块
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env.local', '.env'], // Load .env.local first, then .env
-      load: [databaseConfig, redisConfig, rabbitmqConfig], // Load configuration files
+      envFilePath: ['.env.local', '.env'], // 先加载.env.local，然后加载.env
+      load: [databaseConfig, redisConfig, rabbitmqConfig], // 加载配置文件
     }),
 
-    // Database module - only if database is available
+    // 数据库模块 - 仅当数据库可用时
     ...(process.env.NODE_ENV !== 'test'
       ? [
           TypeOrmModule.forRootAsync({
@@ -42,10 +42,10 @@ import { rabbitmqConfig } from './config/rabbitmq.config'
         ]
       : []),
 
-    // Health check module
+    // 健康检查模块
     TerminusModule,
 
-    // Feature modules
+    // 功能模块
     UsersModule,
   ],
   controllers: [AppController, HealthController],

@@ -14,7 +14,7 @@ export const databaseConfig = registerAs('database', () => ({
   logging: process.env.NODE_ENV === 'development',
 }))
 
-// TypeORM CLI configuration
+// TypeORM CLI 配置
 export const dataSourceOptions: DataSourceOptions = {
   type: 'mysql',
   host: process.env.DB_HOST || 'localhost',

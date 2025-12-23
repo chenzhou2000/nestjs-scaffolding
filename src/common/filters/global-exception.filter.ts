@@ -44,7 +44,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       }),
     }
 
-    // Log the error
+    // 记录错误
     console.error('Global Exception:', {
       ...errorResponse,
       stack: (exception as Error).stack,

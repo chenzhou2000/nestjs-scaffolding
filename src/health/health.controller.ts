@@ -29,7 +29,7 @@ export class HealthController {
       () => this.healthService.checkRabbitMQ(),
     ]
 
-    // Only add database check if not in test environment
+    // 仅在非测试环境下添加数据库检查
     if (process.env.NODE_ENV !== 'test') {
       checks.unshift(() => this.db.pingCheck('database'))
     }
@@ -42,7 +42,7 @@ export class HealthController {
   readiness() {
     const checks = [() => this.healthService.checkRedis()]
 
-    // Only add database check if not in test environment
+    // 仅在非测试环境下添加数据库检查
     if (process.env.NODE_ENV !== 'test') {
       checks.unshift(() => this.db.pingCheck('database'))
     }

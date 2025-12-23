@@ -15,7 +15,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    // Check if user with email already exists
+    // 检查邮箱是否已存在
     const existingUser = await this.userRepository.findOne({
       where: { email: createUserDto.email },
     })
@@ -24,10 +24,10 @@ export class UsersService {
       throw new ConflictException('User with this email already exists')
     }
 
-    // Hash password
+    // 哈希密码
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10)
 
-    // Create user
+    // 创建用户
     const user = this.userRepository.create({
       ...createUserDto,
       password: hashedPassword,
@@ -42,7 +42,7 @@ export class UsersService {
 
     const queryBuilder = this.userRepository.createQueryBuilder('user')
 
-    // Apply filters
+    // 应用筛选条件
     if (search) {
       queryBuilder.andWhere(
         '(user.firstName LIKE :search OR user.lastName LIKE :search OR user.email LIKE :search)',
@@ -58,10 +58,10 @@ export class UsersService {
       queryBuilder.andWhere('user.isActive = :isActive', { isActive })
     }
 
-    // Apply pagination
+    // 应用分页
     queryBuilder.skip(skip).take(limit)
 
-    // Order by creation date
+    // 按创建日期排序
     queryBuilder.orderBy('user.createdAt', 'DESC')
 
     const [data, total] = await queryBuilder.getManyAndCount()
@@ -98,7 +98,7 @@ export class UsersService {
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.findById(id)
 
-    // Check if email is being updated and if it already exists
+    // 检查邮箱是否被更新且是否已存在
     if (updateUserDto.email && updateUserDto.email !== user.email) {
       const existingUser = await this.userRepository.findOne({
         where: { email: updateUserDto.email },
@@ -109,7 +109,7 @@ export class UsersService {
       }
     }
 
-    // Update user
+    // 更新用户
     Object.assign(user, updateUserDto)
     return await this.userRepository.save(user)
   }

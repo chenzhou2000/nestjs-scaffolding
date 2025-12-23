@@ -46,7 +46,7 @@ export class HealthService extends HealthIndicator {
         this.configService.get('rabbitmq.url') || 'amqp://localhost:5672'
       const connection = await amqp.connect(rabbitmqUrl)
 
-      // Test creating a channel
+      // 测试创建通道
       const channel = await connection.createChannel()
       await channel.close()
       await connection.close()
