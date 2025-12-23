@@ -13,7 +13,6 @@
 - **gRPC_Service**: 高性能RPC框架服务，用于微服务间通信
 - **JWT_Token**: JSON Web Token，用于用户身份验证
 - **TypeORM**: TypeScript对象关系映射库
-- **Swagger_Documentation**: API文档生成工具
 - **Docker_Container**: 容器化部署环境
 
 ## 需求
@@ -101,18 +100,6 @@
 3. WHEN 图片上传时 THEN NestJS_API SHALL 生成不同尺寸的缩略图
 4. WHEN 文件下载请求时 THEN NestJS_API SHALL 验证权限并提供文件流
 5. WHEN 文件删除时 THEN NestJS_API SHALL 从存储和MySQL_Database中移除文件记录
-
-### 需求 8
-
-**用户故事:** 作为开发者，我希望实现API文档和测试功能，以便学习文档生成和API测试。
-
-#### 验收标准
-
-1. WHEN 应用启动时 THEN Swagger_Documentation SHALL 自动生成完整的API文档
-2. WHEN API端点定义时 THEN Swagger_Documentation SHALL 包含请求参数、响应格式和示例
-3. WHEN 文档访问时 THEN Swagger_Documentation SHALL 提供交互式API测试界面
-4. WHEN 数据模型变更时 THEN Swagger_Documentation SHALL 自动更新相关文档
-5. WHEN 认证需要时 THEN Swagger_Documentation SHALL 支持JWT_Token测试
 
 ### 需求 9
 

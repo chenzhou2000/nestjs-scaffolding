@@ -6,6 +6,7 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { HealthController } from './health/health.controller'
 import { HealthService } from './health/health.service'
+import { UsersModule } from './modules/users/users.module'
 import { databaseConfig } from './config/database.config'
 import { redisConfig } from './config/redis.config'
 import { rabbitmqConfig } from './config/rabbitmq.config'
@@ -43,6 +44,9 @@ import { rabbitmqConfig } from './config/rabbitmq.config'
 
     // Health check module
     TerminusModule,
+
+    // Feature modules
+    UsersModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService, HealthService],

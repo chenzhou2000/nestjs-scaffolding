@@ -10,7 +10,6 @@
 - **Microservices**: gRPC for inter-service communication
 - **Authentication**: JWT-based authentication and authorization
 - **File Upload**: Multer with image processing
-- **API Documentation**: Swagger/OpenAPI integration
 - **Logging**: Winston for comprehensive logging
 - **Testing**: Jest with property-based testing using fast-check
 - **Containerization**: Docker and Docker Compose
@@ -135,7 +134,6 @@ npm run seed
 
 Once the application is running, you can access:
 
-- **Swagger UI**: http://localhost:3000/docs
 - **Health Check**: http://localhost:3000/health
 - **Application Info**: http://localhost:3000
 
