@@ -1,0 +1,245 @@
+{
+  "project": {
+    "name": "NestJS 学习 API",
+    "description": "一个全面的 NestJS 学习 API 项目，涵盖现代后端开发技术",
+    "version": "1.0.0",
+    "baseUrl": "http://localhost:3000",
+    "author": "Developer",
+    "license": "MIT"
+  },
+  "modules": {
+    "auth": {
+      "name": "认证模块",
+      "description": "JWT认证、角色权限控制系统",
+      "difficulty": "intermediate",
+      "estimatedReadTime": 15,
+      "prerequisites": ["基础NestJS知识", "JWT概念"],
+      "techStack": ["JWT", "Passport", "bcryptjs"],
+      "apiEndpoints": [
+        {
+          "method": "POST",
+          "path": "/auth/login",
+          "description": "用户登录"
+        },
+        {
+          "method": "POST", 
+          "path": "/auth/register",
+          "description": "用户注册"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/logout",
+          "description": "用户登出"
+        }
+      ]
+    },
+    "users": {
+      "name": "用户管理模块",
+      "description": "用户CRUD操作、数据验证系统",
+      "difficulty": "beginner",
+      "estimatedReadTime": 12,
+      "prerequisites": ["基础NestJS知识", "TypeORM基础"],
+      "techStack": ["TypeORM", "class-validator", "class-transformer"],
+      "apiEndpoints": [
+        {
+          "method": "GET",
+          "path": "/users",
+          "description": "获取用户列表"
+        },
+        {
+          "method": "POST",
+          "path": "/users",
+          "description": "创建用户"
+        },
+        {
+          "method": "GET",
+          "path": "/users/:id",
+          "description": "获取用户详情"
+        },
+        {
+          "method": "PUT",
+          "path": "/users/:id",
+          "description": "更新用户"
+        },
+        {
+          "method": "DELETE",
+          "path": "/users/:id",
+          "description": "删除用户"
+        }
+      ]
+    },
+    "cache": {
+      "name": "缓存模块",
+      "description": "Redis集成、缓存策略管理",
+      "difficulty": "intermediate",
+      "estimatedReadTime": 18,
+      "prerequisites": ["Redis基础", "缓存概念"],
+      "techStack": ["Redis", "ioredis", "自定义装饰器"],
+      "apiEndpoints": [
+        {
+          "method": "GET",
+          "path": "/cache/:key",
+          "description": "获取缓存值"
+        },
+        {
+          "method": "POST",
+          "path": "/cache",
+          "description": "设置缓存"
+        },
+        {
+          "method": "DELETE",
+          "path": "/cache/:key",
+          "description": "删除缓存"
+        }
+      ]
+    },
+    "queue": {
+      "name": "消息队列模块",
+      "description": "RabbitMQ异步处理、邮件服务",
+      "difficulty": "advanced",
+      "estimatedReadTime": 25,
+      "prerequisites": ["消息队列概念", "RabbitMQ基础"],
+      "techStack": ["RabbitMQ", "amqplib", "邮件服务"],
+      "apiEndpoints": [
+        {
+          "method": "POST",
+          "path": "/queue/send-email",
+          "description": "发送邮件"
+        },
+        {
+          "method": "POST",
+          "path": "/queue/process-task",
+          "description": "处理异步任务"
+        }
+      ]
+    },
+    "grpc": {
+      "name": "gRPC模块",
+      "description": "微服务通信、Protocol Buffers",
+      "difficulty": "advanced",
+      "estimatedReadTime": 30,
+      "prerequisites": ["gRPC概念", "Protocol Buffers"],
+      "techStack": ["gRPC", "Protocol Buffers", "@grpc/grpc-js"],
+      "apiEndpoints": []
+    },
+    "files": {
+      "name": "文件处理模块",
+      "description": "文件上传、存储、图片处理",
+      "difficulty": "intermediate",
+      "estimatedReadTime": 20,
+      "prerequisites": ["文件处理概念", "Multer基础"],
+      "techStack": ["Multer", "Sharp", "文件系统"],
+      "apiEndpoints": [
+        {
+          "method": "POST",
+          "path": "/files/upload",
+          "description": "上传文件"
+        },
+        {
+          "method": "GET",
+          "path": "/files/:id",
+          "description": "下载文件"
+        },
+        {
+          "method": "DELETE",
+          "path": "/files/:id",
+          "description": "删除文件"
+        }
+      ]
+    },
+    "logging": {
+      "name": "日志监控模块",
+      "description": "应用监控、调试、性能分析",
+      "difficulty": "intermediate",
+      "estimatedReadTime": 16,
+      "prerequisites": ["日志概念", "Winston基础"],
+      "techStack": ["Winston", "拦截器", "装饰器"],
+      "apiEndpoints": [
+        {
+          "method": "GET",
+          "path": "/logs",
+          "description": "查询日志"
+        },
+        {
+          "method": "GET",
+          "path": "/logs/performance",
+          "description": "性能日志"
+        }
+      ]
+    },
+    "database": {
+      "name": "数据库模块",
+      "description": "TypeORM、数据库操作、迁移管理",
+      "difficulty": "intermediate",
+      "estimatedReadTime": 22,
+      "prerequisites": ["数据库基础", "TypeORM概念"],
+      "techStack": ["TypeORM", "MySQL", "数据库迁移"],
+      "apiEndpoints": []
+    },
+    "error-handling": {
+      "name": "错误处理模块",
+      "description": "异常管理、熔断机制、系统稳定性",
+      "difficulty": "advanced",
+      "estimatedReadTime": 20,
+      "prerequisites": ["异常处理概念", "熔断器模式"],
+      "techStack": ["异常过滤器", "熔断器", "重试机制"],
+      "apiEndpoints": []
+    },
+    "health": {
+      "name": "健康检查模块",
+      "description": "应用监控、运维管理、系统状态检查",
+      "difficulty": "intermediate",
+      "estimatedReadTime": 14,
+      "prerequisites": ["监控概念", "健康检查"],
+      "techStack": ["@nestjs/terminus", "健康检查", "监控指标"],
+      "apiEndpoints": [
+        {
+          "method": "GET",
+          "path": "/health",
+          "description": "健康检查"
+        },
+        {
+          "method": "GET",
+          "path": "/health/database",
+          "description": "数据库健康检查"
+        },
+        {
+          "method": "GET",
+          "path": "/health/redis",
+          "description": "Redis健康检查"
+        }
+      ]
+    }
+  },
+  "templates": {
+    "moduleTemplate": "docs/templates/module-template.md",
+    "apiTemplate": "docs/templates/api-template.md"
+  },
+  "output": {
+    "modulesDir": "docs/modules",
+    "apiReferenceDir": "docs/api-reference",
+    "examplesDir": "docs/examples",
+    "guidesDir": "docs/guides"
+  },
+  "validation": {
+    "requiredSections": [
+      "## 概述",
+      "## 功能特性",
+      "## 配置说明", 
+      "## API接口",
+      "## 使用示例",
+      "## 最佳实践",
+      "## 测试指南",
+      "## 故障排除",
+      "## 相关资源"
+    ],
+    "apiRequiredSections": [
+      "## 概述",
+      "## 基础信息",
+      "## 端点列表",
+      "## 数据模型",
+      "## 使用示例",
+      "## 错误处理"
+    ]
+  }
+}
