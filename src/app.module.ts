@@ -28,9 +28,7 @@ import { loggerConfig } from './config/logger.config'
     }),
 
     // 数据库模块 - 仅当数据库可用时
-    ...(process.env.NODE_ENV !== 'test'
-      ? [
-          TypeOrmModule.forRootAsync({
+    TypeOrmModule.forRootAsync({
             useFactory: () => ({
               type: 'mysql',
               host: process.env.DB_HOST || 'localhost',
@@ -46,8 +44,6 @@ import { loggerConfig } from './config/logger.config'
               retryDelay: 3000,
             }),
           }),
-        ]
-      : []),
 
     // 健康检查模块
     TerminusModule,

@@ -4,80 +4,143 @@
 
 ## 📚 文档导航
 
-### 功能模块文档
-- [认证模块](./modules/auth.md) - JWT认证、角色权限控制
-- [用户管理模块](./modules/users.md) - 用户CRUD操作、数据验证
-- [缓存模块](./modules/cache.md) - Redis集成、缓存策略
-- [消息队列模块](./modules/queue.md) - RabbitMQ异步处理
-- [gRPC模块](./modules/grpc.md) - 微服务通信
-- [文件处理模块](./modules/files.md) - 文件上传、存储、处理
-- [日志监控模块](./modules/logging.md) - 应用监控、调试
-- [数据库模块](./modules/database.md) - TypeORM、数据库操作
-- [错误处理模块](./modules/error-handling.md) - 异常管理、系统稳定性
-- [健康检查模块](./modules/health.md) - 应用监控、运维管理
+### 📖 已完成的功能模块文档
+- [认证模块](./modules/auth.md) - JWT认证、角色权限控制、安全机制
+- [用户管理模块](./modules/users.md) - 用户CRUD操作、数据验证、分页查询
+- [日志监控模块](./modules/logging.md) - Winston日志、性能监控、请求追踪
+- [数据库模块](./modules/database.md) - TypeORM配置、实体关系、查询优化
+- [错误处理模块](./modules/error-handling.md) - 异常管理、熔断机制、系统稳定性
 
-### API 参考文档
-- [认证 API](./api-reference/auth-api.md)
-- [用户管理 API](./api-reference/users-api.md)
-- [缓存 API](./api-reference/cache-api.md)
-- [文件处理 API](./api-reference/files-api.md)
-- [健康检查 API](./api-reference/health-api.md)
+### 🚧 计划中的功能模块文档
+- 缓存模块 - Redis集成、缓存策略
+- 消息队列模块 - RabbitMQ异步处理
+- gRPC模块 - 微服务通信
+- 文件处理模块 - 文件上传、存储、处理
+- 健康检查模块 - 应用监控、运维管理
 
-### 使用示例
-- [认证示例](./examples/auth-examples.md)
-- [缓存使用示例](./examples/cache-examples.md)
-- [gRPC 通信示例](./examples/grpc-examples.md)
-- [文件处理示例](./examples/files-examples.md)
-- [消息队列示例](./examples/queue-examples.md)
+### 📋 API 参考文档
+- [认证 API](./api-reference/auth-api.md) - 登录、注册、权限验证接口
 
-### 指南文档
-- [项目搭建指南](./guides/setup-guide.md)
-- [测试指南](./guides/testing-guide.md)
-- [部署指南](./guides/deployment-guide.md)
-- [最佳实践](./guides/best-practices.md)
+### 🔧 配置和工具
+- [文档系统说明](./DOCUMENTATION_SYSTEM.md) - 文档生成和管理系统
+- [NestJS功能点总结](./nestjs功能点.md) - 项目功能特性概览
 
 ## 🚀 快速开始
 
-1. **新手入门**: 建议从[项目搭建指南](./guides/setup-guide.md)开始
-2. **功能学习**: 按需查看各个[功能模块文档](#功能模块文档)
-3. **实践应用**: 参考[使用示例](#使用示例)进行实际开发
-4. **深入理解**: 查看[API参考文档](#api-参考文档)了解详细接口
+### 对于初学者
+1. **了解项目结构**: 查看[NestJS功能点总结](./nestjs功能点.md)了解项目整体架构
+2. **学习基础模块**: 从[用户管理模块](./modules/users.md)开始，理解基本的CRUD操作
+3. **掌握认证机制**: 学习[认证模块](./modules/auth.md)，了解JWT和权限控制
+4. **理解数据层**: 通过[数据库模块](./modules/database.md)掌握TypeORM的使用
+
+### 对于有经验的开发者
+1. **系统监控**: 学习[日志监控模块](./modules/logging.md)和[错误处理模块](./modules/error-handling.md)
+2. **高级特性**: 等待缓存、消息队列、gRPC等高级模块文档完成
+3. **API集成**: 参考[认证 API](./api-reference/auth-api.md)了解接口规范
 
 ## 📖 学习路径推荐
 
-### 初级开发者
-1. [项目搭建指南](./guides/setup-guide.md)
-2. [用户管理模块](./modules/users.md)
-3. [认证模块](./modules/auth.md)
-4. [数据库模块](./modules/database.md)
+### 🌱 基础学习路径（推荐新手）
+```
+用户管理模块 → 认证模块 → 数据库模块 → 日志监控模块
+```
+**学习目标**: 掌握NestJS基础概念、CRUD操作、JWT认证和数据库操作
 
-### 中级开发者
-1. [缓存模块](./modules/cache.md)
-2. [日志监控模块](./modules/logging.md)
-3. [错误处理模块](./modules/error-handling.md)
-4. [健康检查模块](./modules/health.md)
+### 🔧 系统稳定性路径
+```
+错误处理模块 → 日志监控模块 → 认证模块（安全部分）
+```
+**学习目标**: 理解异常处理、系统监控和安全机制
 
-### 高级开发者
-1. [消息队列模块](./modules/queue.md)
-2. [gRPC模块](./modules/grpc.md)
-3. [文件处理模块](./modules/files.md)
-4. [最佳实践](./guides/best-practices.md)
+### 🚀 全栈开发路径
+```
+认证模块 → 用户管理模块 → 数据库模块 → 日志监控模块 → 错误处理模块
+```
+**学习目标**: 具备完整的后端开发能力
 
-## 🛠 技术栈
+## 🛠 技术栈概览
 
-- **框架**: NestJS
-- **数据库**: MySQL + TypeORM
-- **缓存**: Redis
-- **消息队列**: RabbitMQ
-- **认证**: JWT
-- **通信**: gRPC
-- **日志**: Winston
-- **测试**: Jest
+### 核心框架
+- **NestJS** - 企业级Node.js框架
+- **TypeScript** - 类型安全的JavaScript超集
 
-## 📝 文档贡献
+### 数据存储
+- **MySQL** - 关系型数据库
+- **TypeORM** - TypeScript ORM框架
+- **Redis** - 内存数据库（缓存）
 
-如果您发现文档中的错误或希望改进内容，欢迎提交 Issue 或 Pull Request。
+### 认证与安全
+- **JWT** - JSON Web Token认证
+- **Passport** - 认证中间件
+- **bcrypt** - 密码加密
+
+### 监控与日志
+- **Winston** - 日志记录
+- **性能监控** - 自定义性能装饰器
+
+### 开发工具
+- **Jest** - 测试框架
+- **ESLint** - 代码规范
+- **Prettier** - 代码格式化
+
+## 📊 文档完成状态
+
+| 模块 | 状态 | 完成度 | 最后更新 |
+|------|------|--------|----------|
+| 认证模块 | ✅ 已完成 | 100% | 最新 |
+| 用户管理模块 | ✅ 已完成 | 100% | 最新 |
+| 数据库模块 | ✅ 已完成 | 100% | 最新 |
+| 日志监控模块 | ✅ 已完成 | 100% | 最新 |
+| 错误处理模块 | ✅ 已完成 | 100% | 最新 |
+| 缓存模块 | 🚧 计划中 | 0% | - |
+| 消息队列模块 | 🚧 计划中 | 0% | - |
+| gRPC模块 | 🚧 计划中 | 0% | - |
+| 文件处理模块 | 🚧 计划中 | 0% | - |
+| 健康检查模块 | 🚧 计划中 | 0% | - |
+
+## 🤝 如何使用本文档
+
+### 按角色使用
+- **学习者**: 按照学习路径逐步学习各个模块
+- **开发者**: 直接查看相关模块文档和API参考
+- **架构师**: 重点关注系统设计和最佳实践
+
+### 按需求使用
+- **快速上手**: 查看快速开始部分
+- **深入学习**: 按学习路径系统学习
+- **问题解决**: 查看具体模块的故障排除部分
+- **API集成**: 参考API参考文档
+
+## 📝 文档贡献指南
+
+### 贡献方式
+1. **发现问题**: 如果发现文档错误或不清楚的地方，请提交Issue
+2. **改进建议**: 欢迎提出文档改进建议
+3. **内容贡献**: 可以提交Pull Request来完善文档内容
+
+### 文档规范
+- 使用中文编写，专业术语保留英文
+- 代码示例要完整可运行
+- 包含必要的解释说明
+- 遵循现有的文档结构和格式
+
+## 🔗 相关资源
+
+### 官方文档
+- [NestJS 官方文档](https://nestjs.com/)
+- [TypeORM 官方文档](https://typeorm.io/)
+- [TypeScript 官方文档](https://www.typescriptlang.org/)
+
+### 学习资源
+- [NestJS 中文文档](https://nestjs.bootcss.com/)
+- [Node.js 最佳实践](https://github.com/goldbergyoni/nodebestpractices)
 
 ## 📄 许可证
 
-本项目采用 MIT 许可证。
+本项目采用 MIT 许可证。详情请查看 [LICENSE](../LICENSE) 文件。
+
+---
+
+**最后更新**: 2024年12月
+**文档版本**: v1.0
+**维护者**: NestJS学习项目团队

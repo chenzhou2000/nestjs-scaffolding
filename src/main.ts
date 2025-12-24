@@ -15,7 +15,8 @@ import * as fs from 'fs'
 import * as path from 'path'
 
 async function bootstrap() {
-  // Ensure logs directory exists
+  
+  // 确保日志目录存在
   const logsDir = path.join(process.cwd(), 'logs')
   if (!fs.existsSync(logsDir)) {
     fs.mkdirSync(logsDir, { recursive: true })
